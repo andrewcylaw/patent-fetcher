@@ -30,6 +30,7 @@ class SQLiteOutputClient(OutputClient):
             #  - ORM / actual table types
             #  - schema migration (eg Flyway/liquibase/Django ORM)
             with sqlite3.connect(cli_settings.sqlite_db) as conn:
+                # Note these are obviously incorrect, but left here for demonstration purposes
                 conn.execute("CREATE TABLE IF NOT EXISTS patent (data TEXT)")
                 conn.executemany("INSERT INTO patent (data) VALUES (?)", [(p.model_dump_json(),) for p in patents])
                 output.num_items_outputted = int(conn.execute("SELECT COUNT(*) FROM patent;").fetchone()[0])

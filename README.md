@@ -1,6 +1,9 @@
 # Patent Fetcher
 
+The fetcher performs a batch-based query on the given patent api, and dumps either to disk or to a database (SQLite included for reference).
+Performs a health check, and if successful, pulls patents from the given date range. 
 
+This is a demonstration project for Python polish and engineering principles, with deliberate design decisions outlined in the comments.
 
 
 ### Implementation 
@@ -11,13 +14,12 @@
 - Environment variables managed using `pydantic-settings`
 - Containerized using `docker`, but also runnable on local machine
 
-
-The fetcher performs a batch-based query on the given patent api, and dumps either to disk or to a database (SQLite included for reference).
-Performs a health check, and if successful, pulls patents from the given date range. The program logic flow is 
+The program logic flow is 
 
 ```
- cli -> patent client <-> api
-              |
+                             
+ cli -> patent client <-> api -> /health
+              |               -> /patents
               v
          output client
          /     |     \  
@@ -34,7 +36,7 @@ I think there is ample room for feature enhancements, such as:
 - Exception handling
   - I am intentionally raising generic `HTTPErrors` and `ValueErrors`, but a real system would have custom exception types, tracebacks, and other error handling like retries
 - Testing
-  - Full unit testing would
+  - Full unit testing (current project implements some basic unit testing but is not fully comprehensive / exhaustive) and takes some shortcuts with monkeypatching
 - Production
   - Other productionizing tools, such as `flake8`, `mypy`, `black`, `precommit` were omitted for brevity, but normally they would be included 
 
